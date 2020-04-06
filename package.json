@@ -1,0 +1,20 @@
+{
+  "name": "bootcamps",
+  "version": "1.0.0",
+  "description": "number of bootcamps",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "bootcamps"
+  ],
+  "author": "Kwibe Merci",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.7",
+    "morgan": "^1.10.0"
+  }
+}
