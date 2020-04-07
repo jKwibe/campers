@@ -6,11 +6,21 @@ const router = express.Router();
 
 // importing the controllers
 
-const {getBootCamps, createBootCamps} = require('../controllers/bootcamps');
+const { getBootCamps,
+        createBootCamps, 
+        getSingleBootcamp,
+        deleteBootcamp,
+        updateBootcamp
+    } = require('../controllers/bootcamps');
 
  router.route('/')
        .get(getBootCamps)
-       .post(createBootCamps)
+       .post(createBootCamps);
+
+ router.route('/:id')
+        .get(getSingleBootcamp)
+        .delete(deleteBootcamp)
+        .put(updateBootcamp)
 
 
 
