@@ -17,7 +17,7 @@ exports.getBootCamps = async (req, res, next)=>{
       });
   } catch (err) {
 
-    next(new ErrorResponse(`Resource not found`, 400))
+    next(err)
   }
 
 }
@@ -34,8 +34,7 @@ exports.createBootCamps = async (req, res, next)=>{
       data: bootcamp
     })
   } catch (err) {
-
-    next(new ErrorResponse(`Resource not found with the id ${req.params.id}`, 404))
+    next(err)
   }
 
 }
@@ -47,14 +46,17 @@ exports.getSingleBootcamp = async (req, res, next)=>{
 
   try {
     const bootcamp = await Bootcamp.findById(req.params.id);
+    if (!bootcamp){
+      return next(new ErrorResponse(`Resource not found with the id ${req.params.id}`, 404));
+    }
 
     res.status(200).json({
-      sucess: true,
+      success: true,
       data: bootcamp
     })
-  } catch (err) {
 
-    next(new ErrorResponse(`Resource not found with the id ${req.params.id}`, 404))
+  } catch (err) {
+    next(err)
   }
 }
 
@@ -74,12 +76,11 @@ exports.deleteBootcamp = async (req, res, next) =>{
     }
 
     res.status(200).json({
-        sucess: true,
+        success: true,
         data: deletedBootcamp
     })
   } catch (err) {
-
-    next(new ErrorResponse(`Resource not found with the id ${req.params.id}`, 404))
+    next(err)
   }
 }
 
@@ -103,11 +104,10 @@ exports.updateBootcamp = async (req, res, next)=>{
     // console.log(updateBootcamp);
 
     res.status(200).json({
-        sucess: true,
+        success: true,
         data: updatedBootcamp
     })
   } catch (err) {
-
-    next(new ErrorResponse(`Resource not found with the id ${req.params.id}`, 404))
+    next(err)
   }
 }
