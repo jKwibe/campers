@@ -11,6 +11,8 @@ const bodyParser = require('body-parser');
 // Bring in the database
 const connectDB = require('./config/db/db');
 
+const errorHandler = require('./middleware/error');
+
 const app = express();
 
 dotenv.config({path: './config/config.env'})
@@ -33,7 +35,8 @@ const bootcampRoutes = require('./routes/bootcamps');
 // adding the routes
 app.use('/api/v1/bootcamps', bootcampRoutes)
 
-
+// error handler execution
+app.use(errorHandler);
 app.listen(PORT, ()=>{
   console.log(`You are logged in ${process.env.NODE_ENV} mode in port ${PORT}`);
 })
