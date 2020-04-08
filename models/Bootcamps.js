@@ -2,6 +2,8 @@
 const mongoose = require('mongoose');
 const timestamps = require('mongoose-timestamp');
 
+const geocoder = require('../helpers/geocoder');
+
 const slugify = require('slugify');
 const Schema = mongoose.Schema;
 
@@ -54,15 +56,20 @@ const BootcampSchema = new Schema({
    coordinates: {
      type: [Number],
      // required: true,
-     index: '2dsphere'
-   }
+     index: '2dsphere',
+   },
+    formattedAddress: String,
+    city: String,
+    state: String,
+    zip: String
  },
 
    address: {
      type: String,
      required: [true , 'Please add a valid address']
    },
-   carriers:{
+
+   careers:{
      type: [String],
      required: true,
      enum:[
@@ -84,6 +91,25 @@ BootcampSchema.plugin(timestamps);
 // Create bootcamp slug from Name
 BootcampSchema.pre('save', function(next){
   this.slug = slugify(this.name, {lower: true});
+  next();
+});
+
+// Geocoder schema middleware
+
+BootcampSchema.pre('save', async function(next){
+  const loc = await geocoder.geocode(this.address);
+  console.log(loc);
+  this.location = {
+    type: 'Point',
+    coordinates: [loc[0].longitude, loc[0].latitude],
+    formattedAddress: loc[0].formattedAddress,
+    city: loc[0].city,
+    state: loc[0].stateCode,
+    zip: loc[0].zipcode,
+  }
+
+  //Do not save the address entered by the user
+  this.address = undefined;
   next();
 })
 
