@@ -67,7 +67,7 @@ const BootcampSchema = new Schema({
        'Backend Development',
        'Frontend Development',
        'Data Science',
-      ' Others'
+       'Others'
      ]
    },
 
