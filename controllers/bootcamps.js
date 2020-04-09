@@ -15,7 +15,7 @@ exports.getBootCamps = asyncHandler(async (req, res, next)=>{
 //getting a copy of the query params
 const reqQuery = {...req.query};
 
-let paramFields = ['select'];
+let paramFields = ['select','sort'];
 
 paramFields.forEach((param) => {
   delete reqQuery[param];
@@ -27,11 +27,22 @@ let querystring = JSON.stringify(reqQuery);
   querystring = querystring.replace(/\b gt|gte|lt|lte|in\b/g, match=> `$${match}`);
 // console.log(querystring);
 let query = Bootcamp.find(JSON.parse(querystring));
-console.log(req.query.select);
+console.log(req.query.sort);
+
+//select
 if(req.query.select){
  const fields = req.query.select.split(",").join(" ");
  query = query.select(fields);
 }
+
+//sortBy
+if(req.query.sort){
+ const sortBy = req.query.sort.split(",").join(" ");
+ query = query.sort(sortBy);
+}else{
+  query = query.sort('-createdAt');
+}
+
 
 
     const bootcamps = await query;
