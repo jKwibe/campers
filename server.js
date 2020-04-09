@@ -31,12 +31,14 @@ app.use(bodyParser.json())
 
 // Bring in the routes
 const bootcampRoutes = require('./routes/bootcamps');
+const coursesRoutes = require('./routes/courses');
 
 // adding the routes
-app.use('/api/v1/bootcamps', bootcampRoutes)
+app.use('/api/v1/bootcamps', bootcampRoutes);
+app.use('/api/v1/courses', coursesRoutes);
 
 // error handler execution
 app.use(errorHandler);
 app.listen(PORT, ()=>{
-  console.log(`You are logged in ${process.env.NODE_ENV} mode in port ${PORT}`);
+  console.log(`You are logged in ${process.env.NODE_ENV} mode in port ${PORT}`.yellow.bold.inverse);
 })
