@@ -39,6 +39,10 @@ const CoursesSchema = new Schema({
    scholarhipsAvailable: {
      type: Boolean,
      default: true
+   },
+   bootcamp: {
+     type: mongoose.Schema.ObjectId,
+     ref: 'Bootcamp'
    }
 });
 
