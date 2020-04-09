@@ -4,10 +4,19 @@ const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../helpers/error');
 const Course = require('../models/Courses');
 
+// @desc    Fetch all courses
+// @desc    GET  /api/v1/courses/
+// @access  Public
 
-exports.getAllCourses =  (req, res, next) => {
+// @desc    GET /api/v1/:bootcampid/courses
+// @access  Private
+
+exports.getCourses =  asyncHandler(async (req, res, next) => {
+
+// fetch all bootcamps
+const courses = await Course.find({})
   res.status(200).json({
     success: true,
-    message: "Hello there we are in the courses route"
+    data: courses
   })
-}
+})
