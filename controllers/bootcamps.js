@@ -12,16 +12,29 @@ const geocoder = require('../helpers/geocoder');
 // @access  Public
 exports.getBootCamps = asyncHandler(async (req, res, next)=>{
 
-  // Find the params
-
+//getting a copy of the query params
 const reqQuery = {...req.query};
-console.log(reqQuery);
+
+let paramFields = ['select'];
+
+paramFields.forEach((param) => {
+  delete reqQuery[param];
+});
+
+// console.log(reqQuery);
 // ctreate a string from the reqQuery object
 let querystring = JSON.stringify(reqQuery);
   querystring = querystring.replace(/\b gt|gte|lt|lte|in\b/g, match=> `$${match}`);
-console.log(querystring);
+// console.log(querystring);
+let query = Bootcamp.find(JSON.parse(querystring));
+console.log(req.query.select);
+if(req.query.select){
+ const fields = req.query.select.split(",").join(" ");
+ query = query.select(fields);
+}
 
-    const bootcamps = await Bootcamp.find(JSON.parse(querystring))
+
+    const bootcamps = await query;
       res.status(200).json({
           success: true,
           count: bootcamps.length,
