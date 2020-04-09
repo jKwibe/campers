@@ -9,7 +9,7 @@ const errorHandler = (err, req, res, next)=>{
   console.log(err.code)
     // Error with an impropper // ID
     if (err.name === 'CastError'){
-      const message = `Resource not found with an improper id ${err.value}`;
+      const message = `Resource not found with a non-existing id => id: ${err.value}`;
       error = new ErrorResponse(message, 404);
     }
     // Mongo duplication error handler
