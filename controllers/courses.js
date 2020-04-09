@@ -4,6 +4,7 @@ const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../helpers/error');
 const Course = require('../models/Courses');
 
+
 // @desc    Fetch all courses
 // @desc    GET  /api/v1/courses/
 // @desc    GET /api/v1/bootcamps/:bootcampid/courses
@@ -22,7 +23,11 @@ if(req.params.bootcampid){
   query= Course.find({bootcamp: req.params.bootcampid});
 
 }else{
-  query = Course.find({});
+  //populating the courses
+  query = Course.find().populate({
+    path: 'bootcamp',
+    select: 'name description'
+  });
 }
 
 // fetch all courses even with a single bootcamp or display all courses
