@@ -84,6 +84,22 @@ const BootcampSchema = new Schema({
      type: Number,
      min: [1, 'Rating must be at least 1'],
      max: [10, 'Rating must be at most 10']
+   },
+   housing: {
+     type: Boolean,
+     default: false
+   },
+   jobAssistance:{
+     type: Boolean,
+     default: true
+   },
+   jobGuarantee: {
+     type: Boolean,
+     default: false
+   },
+   acceptGi: {
+     type: Boolean,
+     default: true
    }
 });
 BootcampSchema.plugin(timestamps);
@@ -98,7 +114,7 @@ BootcampSchema.pre('save', function(next){
 
 BootcampSchema.pre('save', async function(next){
   const loc = await geocoder.geocode(this.address);
-  // console.log(loc);
+  console.log(loc);
   this.location = {
     type: 'Point',
     coordinates: [loc[0].longitude, loc[0].latitude],
