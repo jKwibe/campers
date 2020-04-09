@@ -1,6 +1,8 @@
 
 //bring in the middleware
 const asyncHandler = require('../middleware/async');
+const ErrorResponse = require('../helpers/error');
+const Course = require('../models/Courses');
 
 
 exports.getAllCourses =  (req, res, next) => {
