@@ -15,7 +15,7 @@ exports.getBootCamps = asyncHandler(async (req, res, next)=>{
 //getting a copy of the query params
 const reqQuery = {...req.query};
 
-let paramFields = ['select','sort'];
+let paramFields = ['select','sort','limit','page'];
 
 paramFields.forEach((param) => {
   delete reqQuery[param];
@@ -43,13 +43,41 @@ if(req.query.sort){
   query = query.sort('-createdAt');
 }
 
+// pagination
+const page = parseInt(req.query.page, 10) || 1;
+const limit = parseInt(req.query.limit, 10)|| 25;
+const startIndex = (page - 1) * limit;
+const endIndex = page * limit;
+const total = await Bootcamp.countDocuments();
 
+query = query.skip(startIndex).limit(limit);
 
-    const bootcamps = await query;
+    const bootcamps = await query
+
+  //creating pagination object to be displayed in the user API
+  // it will show the limit, next page and previous page
+    const pagination = {};
+
+    if(endIndex < total){
+      pagination.next ={
+        page: page + 1,
+        limit
+      };
+    }
+
+    if(startIndex > 0){
+      pagination.prev = {
+        page: page - 1,
+        limit
+      };
+    }
+    // send the response
+
       res.status(200).json({
           success: true,
           count: bootcamps.length,
-          data: bootcamps.reverse()
+          pagination,
+          data: bootcamps
       });
 
 });
