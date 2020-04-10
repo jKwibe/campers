@@ -26,8 +26,14 @@ paramFields.forEach((param) => {
 let querystring = JSON.stringify(reqQuery);
   querystring = querystring.replace(/\b gt|gte|lt|lte|in\b/g, match=> `$${match}`);
 // console.log(querystring);
-let query = Bootcamp.find(JSON.parse(querystring));
-console.log(req.query.sort);
+let query = Bootcamp
+                    .find(JSON.parse(querystring))
+                    .populate({
+                      path: 'courses',
+                      select: 'weeks, tuition, title description'
+                    });
+
+  // console.log(req.query.sort);
 
 //select
 if(req.query.select){
