@@ -1,7 +1,6 @@
 
 const mongoose = require('mongoose');
 const timestamps = require('mongoose-timestamp');
-const Bootcamps = require('./Bootcamps');
 
 const Schema = mongoose.Schema;
 
@@ -43,7 +42,7 @@ const CoursesSchema = new Schema({
    },
    bootcamp: {
      type: mongoose.Schema.ObjectId,
-     ref: Bootcamps
+     ref: 'bootcamp'
    }
 });
 
