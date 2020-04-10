@@ -121,17 +121,19 @@ exports.getSingleBootcamp = asyncHandler(async (req, res, next)=>{
 // @access  Private
 exports.deleteBootcamp = asyncHandler(async (req, res, next) =>{
 
-    const deletedBootcamp = await Bootcamp.findByIdAndDelete(req.params.id);
+    const deletedBootcamp = await Bootcamp.findById(req.params.id);
 
     if(!deletedBootcamp){
       return next(
         new ErrorResponse(`Resource not found with the id ${req.params.id}`, 404 )
       )
     }
+ // this delete the bootcamp and enables pre remove to work in the Schemas
+    deletedBootcamp.remove();
 
     res.status(200).json({
         success: true,
-        data: deletedBootcamp
+        data: {}
     });
 });
 
