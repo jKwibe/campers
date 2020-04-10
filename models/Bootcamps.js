@@ -117,7 +117,7 @@ BootcampSchema.pre('save', function(next){
 
 BootcampSchema.pre('save', async function(next){
   const loc = await geocoder.geocode(this.address);
-  console.log(loc);
+  // console.log(loc);
   this.location = {
     type: 'Point',
     coordinates: [loc[0].longitude, loc[0].latitude],
@@ -139,5 +139,14 @@ BootcampSchema.virtual('courses', {
   foreignField: 'bootcamp',
   justOne: false
 });
+
+// Cascade the delete functionality
+// deleting a bootcamp deletes the assoisiated courses too
+
+BootcampSchema.pre('remove' , async function(next){
+  // console.log(`Courses being removed frombootcamp ${this._id}`);
+  await this.model('course').deleteMany({bootcamp: this._id});
+  next();
+})
 
 module.exports = mongoose.model("bootcamp", BootcampSchema);
