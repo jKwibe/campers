@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const timestamps = require('mongoose-timestamp');
 
 const geocoder = require('../helpers/geocoder');
-
 const slugify = require('slugify');
 const Schema = mongoose.Schema;
 
@@ -101,6 +100,10 @@ const BootcampSchema = new Schema({
      type: Boolean,
      default: true
    }
+},
+{
+  toJSON: { virtuals: true},
+  toObject: { virtuals: true}
 });
 BootcampSchema.plugin(timestamps);
 
@@ -128,5 +131,13 @@ BootcampSchema.pre('save', async function(next){
   this.address = undefined;
   next();
 })
+
+// Reverse populate with virtuals
+BootcampSchema.virtual('courses', {
+  ref: 'course',
+  localField: '_id',
+  foreignField: 'bootcamp',
+  justOne: false
+});
 
 module.exports = mongoose.model("bootcamp", BootcampSchema);
