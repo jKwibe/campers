@@ -93,10 +93,10 @@ const course = await Course.create(req.body);
   });
 });
 
+
 // @desc    Update Course
 // @desc    PUT /api/v1/courses/:id
 // @access  Private
-
 exports.updateCourse =  asyncHandler(async (req, res, next) => {
 
 let course = await Course.findById(req.params.id);
@@ -110,11 +110,31 @@ course = await Course.findByIdAndUpdate(req.params.id, req.body , {
   runValidators: true
 });
 
-
-
 // fetch a single course using the id
   res.status(200).json({
     success: true,
     data: course
+  });
+});
+
+
+
+// @desc    Delete Course
+// @desc    DELETE /api/v1/courses/:id
+// @access  Private
+exports.deleteCourse =  asyncHandler(async (req, res, next) => {
+
+let course = await Course.findById(req.params.id);
+// Check if the course does not exist
+if (!course){
+  return next(new ErrorResponse(`Course does not exist with the id ${req.params.bootcampid}`, 404));
+}
+
+course = await course.remove()
+
+// fetch a single course using the id
+  res.status(200).json({
+    success: true,
+    data: {}
   });
 });
