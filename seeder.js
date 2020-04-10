@@ -1,14 +1,15 @@
  const fs = require('fs');
 
  const mongoose = require('mongoose');
- const colors = require('colors');
- const dotenv = require('dotenv');
+ const colors   = require('colors');
+ const dotenv   = require('dotenv');
 
  dotenv.config({path: './config/config.env'});
 
  //loadmodals
 const Bootcamp = require('./models/Bootcamps');
-const Course = require('./models/Courses');
+const Course   = require('./models/Courses');
+const User     = require('./models/Users');
 
 //connect to // DEBUG:
 mongoose.connect(process.env.MONGO_DB_URI, {
@@ -20,13 +21,15 @@ mongoose.connect(process.env.MONGO_DB_URI, {
 
 // read JSON file
 const bootcamps = JSON.parse(fs.readFileSync(`${__dirname}/_data/bootcamps.json`,'utf-8'));
-const courses = JSON.parse(fs.readFileSync(`${__dirname}/_data/courses.json`,'utf-8'));
+const courses   = JSON.parse(fs.readFileSync(`${__dirname}/_data/courses.json`,'utf-8'));
+const users     = JSON.parse(fs.readFileSync(`${__dirname}/_data/users.json`,'utf-8'));
 
 // import in to db
 const importData = async ()=>{
   try {
     await Bootcamp.create(bootcamps);
     await Course.create(courses);
+    await User.create(users);
     console.log("data imported".green.inverse);
     process.exit();
   } catch (err) {
@@ -40,6 +43,7 @@ const deleteData = async ()=>{
   try {
     await Bootcamp.deleteMany();
     await Course.deleteMany();
+    await User.deleteMany();
     console.log("data destroyed".red.inverse);
     process.exit();
   } catch (err) {
