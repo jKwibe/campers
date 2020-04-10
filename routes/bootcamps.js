@@ -15,11 +15,12 @@ const { getBootCamps,
     } = require('../controllers/bootcamps');
 
 // Get other controllers from other resources
-const {getCourses} = require('../controllers/courses');
+const {getCourses, addCourse} = require('../controllers/courses');
 
 
 router.route('/:bootcampid/courses')
       .get(getCourses)
+      .post(addCourse)
 
  router.route('/')
        .get(getBootCamps)
