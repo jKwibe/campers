@@ -26,7 +26,7 @@ if(req.params.bootcampid){
   //populating the courses
   query = Course.find().populate({
     path: 'bootcamp',
-    select: 'name description'
+    select: 'name description website phoneNo email'
   });
 }
 
@@ -36,5 +36,32 @@ const courses = await query;
     success: true,
     count: courses.length,
     data: courses
-  })
-})
+  });
+});
+
+// @desc    Fetch single courses
+// @desc    GET  /api/v1/courses/:id
+// @access  Public
+
+
+exports.getSingleCourse =  asyncHandler(async (req, res, next) => {
+
+const course = await Course
+                      .findById(req.params.id)
+                      .populate({
+                        path: 'bootcamp',
+                        select: 'name description'
+                      });
+// Check if the course does not exist
+if (!course){
+  return next(new ErrorResponse(`Course does not exist with the id ${req.params.id}`, 404));
+}
+
+
+
+// fetch a single course using the id
+  res.status(200).json({
+    success: true,
+    data: course
+  });
+});
