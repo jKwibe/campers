@@ -1,6 +1,7 @@
 
 
 const express = require('express');
+const responseMiddleware = require('../middleware/responseMid');
 
 const router = express.Router();
 
@@ -14,6 +15,8 @@ const { getBootCamps,
         getBootcampsInRadius
     } = require('../controllers/bootcamps');
 
+    const Bootcamps = require('../models/Bootcamps');
+
 // Get other controllers from other resources
 const {getCourses, addCourse} = require('../controllers/courses');
 
@@ -23,7 +26,7 @@ router.route('/:bootcampid/courses')
       .post(addCourse)
 
  router.route('/')
-       .get(getBootCamps)
+       .get(responseMiddleware(Bootcamps, 'courses'),getBootCamps)
        .post(createBootCamps);
 
  router.route('/:id')
