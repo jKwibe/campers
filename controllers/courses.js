@@ -3,6 +3,7 @@
 const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../helpers/error');
 const Course = require('../models/Courses');
+const Bootcamp = require('../models/Bootcamps');
 
 
 // @desc    Fetch all courses
@@ -56,6 +57,32 @@ const course = await Course
 if (!course){
   return next(new ErrorResponse(`Course does not exist with the id ${req.params.id}`, 404));
 }
+
+
+
+// fetch a single course using the id
+  res.status(200).json({
+    success: true,
+    data: course
+  });
+});
+// @desc    Add Course
+// @desc    POST  /api/v1/bootcamps/:bootcampid/courses
+// @access  Private
+
+
+exports.addCourse =  asyncHandler(async (req, res, next) => {
+
+  // assign the bootcamp id to  be added in the course bootcamp field
+req.body.bootcamp = req.params.bootcampid;
+
+const bootcamp = await Bootcamp.findById(req.params.bootcampid);
+// Check if the course does not exist
+if (!bootcamp){
+  return next(new ErrorResponse(`Bootcamp does not exist with the id ${req.params.bootcampid}`, 404));
+}
+
+const course = await Course.create(req.body);
 
 
 
