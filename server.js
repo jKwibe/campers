@@ -31,11 +31,13 @@ app.use(bodyParser.json())
 
 // Bring in the routes
 const bootcampRoutes = require('./routes/bootcamps');
-const coursesRoutes = require('./routes/courses');
+const coursesRoutes  = require('./routes/courses');
+const authRoutes     = require('./routes/auth');
 
 // adding the routes
 app.use('/api/v1/bootcamps', bootcampRoutes);
 app.use('/api/v1/courses', coursesRoutes);
+app.use('/api/v1/auth', authRoutes);
 
 // error handler execution
 app.use(errorHandler);
