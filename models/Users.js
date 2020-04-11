@@ -2,6 +2,10 @@
 const mongoose = require('mongoose');
 const timestamps = require('mongoose-timestamp');
 const bcrypt = require('bcryptjs');
+const jswt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+
+dotenv.config({path: '../config/config.env'});
 
 const UserSchema = mongoose.Schema({
   name:{
@@ -46,5 +50,14 @@ UserSchema.plugin(timestamps);
     this.password = await bcrypt.hash(this.password, salt);
     next()
   });
+
+  // Sign jwt and return
+  UserSchema.methods.getSignedJwtToken = function(){
+    console.log(typeof process.env.JWT_SECRET);
+    return jswt.sign({id: this._id}, process.env.JWT_SECRET, {
+      expiresIn : process.env.JWT_EXPIRE_TIME
+    });
+  };
+
 
  module.exports = mongoose.model('user', UserSchema);
