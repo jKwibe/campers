@@ -21,13 +21,8 @@ exports.registerUser = asyncHandler(async (req, res, next)=>{
       role
     });
 
-// Create token
-  const token = user.getSignedJwtToken();
-
-    res.status(201).json({
-      success: true,
-      token
-    });
+    // Create token and send it in a cookie
+    sendCookieWithToken(user, 201, res);
 });
 
 
@@ -56,11 +51,27 @@ exports.loginUser = asyncHandler(async (req, res, next)=>{
     }
 
 
-// Create token
-  const token = user.getSignedJwtToken();
+  // Create token and send it in a cookie
+  sendCookieWithToken(user, 200, res);
 
-    res.status(201).json({
-      success: true,
-      token
-    });
 });
+
+
+// Get token from model also create cookie and send Response
+
+const sendCookieWithToken = (user, statusCode, res) =>{
+    const token = user.getSignedJwtToken();
+
+    const options ={
+      expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRE_TIME * 24 * 60 *60 * 1000),
+      httpOnly: true
+    };
+
+    res
+      .status(statusCode)
+      .cookie('token', token, options)
+      .json({
+        success: true,
+        token
+      });
+}
