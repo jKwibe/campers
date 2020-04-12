@@ -7,6 +7,7 @@ const dotenv = require('dotenv');
 const morgan = require('morgan');
 const colors = require('colors');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 // Bring in the database
 const connectDB = require('./config/db/db');
@@ -26,7 +27,10 @@ if (process.env.NODE_ENV === 'development'){
 }
 
 // bodyParser
-app.use(bodyParser.json())
+app.use(bodyParser.json());
+
+// cookie-parser
+app.use(cookieParser());
 
 
 // Bring in the routes
